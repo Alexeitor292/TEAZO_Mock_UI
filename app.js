@@ -14,10 +14,6 @@
   var revealTargets = document.querySelectorAll('.reveal, .drink-card');
   var scrollY = window.scrollY || window.pageYOffset || 0;
   var startTime = performance.now();
-  var gyroTargetX = 0;
-  var gyroTargetY = 0;
-  var gyroX = 0;
-  var gyroY = 0;
   var prefersReducedMotion =
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -54,48 +50,9 @@
     scrollY = window.scrollY || window.pageYOffset || 0;
   }
 
-  function clamp(value, min, max) {
-    return Math.min(max, Math.max(min, value));
-  }
-
-  function bindGyro() {
-    if (!('DeviceOrientationEvent' in window)) return;
-
-    function onOrientation(event) {
-      if (event.gamma == null || event.beta == null) return;
-      gyroTargetX = clamp(event.gamma / 30, -1, 1);
-      gyroTargetY = clamp(event.beta / 45, -1, 1);
-    }
-
-    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-      var unlocked = false;
-      function unlockGyro() {
-        if (unlocked) return;
-        DeviceOrientationEvent.requestPermission()
-          .then(function (state) {
-            if (state !== 'granted') return;
-            unlocked = true;
-            window.addEventListener('deviceorientation', onOrientation, true);
-          })
-          .catch(function () {});
-      }
-
-      window.addEventListener('click', unlockGyro, { once: true });
-      window.addEventListener('touchstart', unlockGyro, { once: true });
-    } else {
-      window.addEventListener('deviceorientation', onOrientation, true);
-    }
-  }
-
   function render(now) {
     var y = scrollY;
     var t = (now - startTime) / 1000;
-
-    gyroX += (gyroTargetX - gyroX) * 0.06;
-    gyroY += (gyroTargetY - gyroY) * 0.06;
-
-    var driftX = gyroX * 22;
-    var driftY = gyroY * 16;
 
     var ax = Math.sin(t * 0.45) * 36;
     var ay = Math.cos(t * 0.34) * 28;
@@ -104,9 +61,9 @@
     var cx = Math.sin(t * 0.32 + 1.2) * 30;
     var cy = Math.cos(t * 0.28 + 0.5) * 34;
 
-    if (blobA) blobA.style.transform = 'translate3d(' + (ax + y * 0.01 + driftX) + 'px,' + (ay + y * 0.02 + driftY) + 'px,0)';
-    if (blobB) blobB.style.transform = 'translate3d(' + (bx - y * 0.012 - driftX * 0.7) + 'px,' + (by + y * 0.01 + driftY * 0.8) + 'px,0)';
-    if (blobC) blobC.style.transform = 'translate3d(' + (cx + y * 0.006 + driftX * 1.2) + 'px,' + (cy - y * 0.01 - driftY * 0.9) + 'px,0)';
+    if (blobA) blobA.style.transform = 'translate3d(' + (ax + y * 0.01) + 'px,' + (ay + y * 0.02) + 'px,0)';
+    if (blobB) blobB.style.transform = 'translate3d(' + (bx - y * 0.012) + 'px,' + (by + y * 0.01) + 'px,0)';
+    if (blobC) blobC.style.transform = 'translate3d(' + (cx + y * 0.006) + 'px,' + (cy - y * 0.01) + 'px,0)';
 
     if (parallaxUp) parallaxUp.style.transform = 'translateY(0px)';
     if (parallaxDown) parallaxDown.style.transform = 'translateY(' + (Math.cos(t * 1.05) * 10 + y * 0.015) + 'px)';
@@ -129,7 +86,6 @@
   }
 
   window.addEventListener('scroll', updateFromScroll, { passive: true });
-  bindGyro();
   updateFromScroll();
   window.requestAnimationFrame(render);
 })();
