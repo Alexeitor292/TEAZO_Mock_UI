@@ -33,6 +33,29 @@ a {
   text-decoration: none;
 }
 
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -3rem;
+  z-index: 40;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  background: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
+  transition: top 160ms ease;
+}
+
+.skip-link:focus-visible {
+  top: 0.75rem;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(210, 102, 118, 0.7);
+  outline-offset: 2px;
+}
+
 .page {
   position: relative;
   isolation: isolate;
@@ -44,21 +67,6 @@ a {
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-}
-
-.rotating-drink-bg {
-  position: absolute;
-  width: min(48vw, 700px);
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 50%;
-  right: -8vw;
-  top: 18vh;
-  opacity: 0.28;
-  mix-blend-mode: soft-light;
-  filter: saturate(1.08) contrast(1.05);
-  transform-origin: 50% 50%;
-  will-change: transform;
 }
 
 .bg-logo-watermark {
@@ -508,13 +516,6 @@ main,
 
   .grid-cards {
     grid-template-columns: 1fr;
-  }
-
-  .rotating-drink-bg {
-    width: 74vw;
-    right: -18vw;
-    top: 28vh;
-    opacity: 0.24;
   }
 
   .bg-logo-watermark {

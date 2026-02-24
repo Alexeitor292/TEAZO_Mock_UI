@@ -4,7 +4,6 @@
   var blobC = document.querySelector('[data-blob="c"]');
   var parallaxUp = document.querySelector('[data-parallax="up"]');
   var parallaxDown = document.querySelector('[data-parallax="down"]');
-  var rotatingDrink = document.querySelector('[data-rotating-drink]');
   var bgLogo = document.querySelector('[data-bg-logo]');
 
   var heroCopy = document.querySelector('.hero-copy');
@@ -15,6 +14,16 @@
   var revealTargets = document.querySelectorAll('.reveal, .drink-card');
   var scrollY = window.scrollY || window.pageYOffset || 0;
   var startTime = performance.now();
+  var prefersReducedMotion =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    revealTargets.forEach(function (el) {
+      el.classList.add('visible');
+    });
+    return;
+  }
 
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(
@@ -63,14 +72,6 @@
     if (featuredTitle) featuredTitle.style.transform = 'translateY(' + (Math.sin(t * 0.7 + 1.1) * 2.2) + 'px)';
     if (featuredSub) featuredSub.style.transform = 'translateY(' + (Math.cos(t * 0.65 + 0.5) * 1.8) + 'px)';
     if (navCenterLogo) navCenterLogo.style.transform = 'translateY(' + (Math.sin(t * 1.2) * 1.2) + 'px)';
-
-    if (rotatingDrink) {
-      var drinkScale = 1 + Math.sin(t * 0.6) * 0.015;
-      var drinkRotation = t * 7 + y * 0.03;
-      rotatingDrink.style.transform =
-        'translate3d(' + (Math.cos(t * 0.38) * 22 - y * 0.01) + 'px,' + (Math.sin(t * 0.43) * 20 + y * 0.02) +
-        'px,0) rotate(' + drinkRotation + 'deg) scale(' + drinkScale + ')';
-    }
 
     if (bgLogo) {
       var logoScale = 1 + Math.sin(t * 0.52) * 0.02;
