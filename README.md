@@ -5,7 +5,7 @@
 This is a static site (`index.html`, `styles.css`, `app.js`), so you can run it in either of these ways:
 
 1. Open `index.html` directly in your browser.
-2. Or serve it with a local HTTP server (recommended).
+2. Or serve it with a local HTTP server
 
 ### Option A: Open directly
 
@@ -30,4 +30,4 @@ Then open:
 npx serve .
 ```
 
-Then open the URL shown in the terminal (usually `http://localhost:3000`).
+Then open the URL shown in the terminal.
